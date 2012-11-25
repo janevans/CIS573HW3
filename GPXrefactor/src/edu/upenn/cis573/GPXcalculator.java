@@ -236,8 +236,11 @@ public class GPXcalculator {
 		double fastestTime = 0;
 	
 		for (int i = 0; i < trksegs.length; i++) {
-		    if (getDistanceInTrkseg(trksegs[i])/calculateElapsedTime(trksegs[i]) >= fastestTime)
-			fastestSegment = i;
+			double speed = getDistanceInTrkseg(trksegs[i])/calculateElapsedTime(trksegs[i]);
+		    if ( speed>= fastestTime){
+		    		fastestTime=speed;
+		    		fastestSegment = i;
+		    }
 		}
 	
 		return fastestSegment;

@@ -71,10 +71,10 @@ public class GPXcalculatorTest {
 
 	@Test
 	public void testDistanceTraveledGPXtrkseg() {
-		double dist = calc.determineTotalDistanceCoveredBetweenPairsOfPointsInGPXTrackSegment(obj.trk().trkseg(0));
+		double dist = calc.getDistanceInTrkseg(obj.trk().trkseg(0));
 		assertEquals(1568.552, dist, 0.01);
 		
-		dist = calc.determineTotalDistanceCoveredBetweenPairsOfPointsInGPXTrackSegment(obj.trk().trkseg(1));
+		dist = calc.getDistanceInTrkseg(obj.trk().trkseg(1));
 		assertEquals(1499.132, dist, 0.01);
 	}
 	
@@ -98,7 +98,7 @@ public class GPXcalculatorTest {
 	public void testFastestSegment() {
 		
 		int fastest = calc.calculateFastestSegment(obj.trk());
-		assertEquals(1, fastest);
+		assertEquals(0, fastest);
 		
 	}
 
