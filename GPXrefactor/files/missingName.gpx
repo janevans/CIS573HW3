@@ -1,0 +1,33 @@
+<gpx>
+  <time>2009-10-17T22:58:43Z</time>
+  <trk>
+    <trkseg>
+      <trkpt lat="47.644548" lon="-122.326897">
+        <ele>4.46</ele>
+        <time>2009-10-17T18:37:26Z</time>
+      </trkpt>
+      <trkpt lat="47.644548" lon="-122.326897">
+        <ele>4.94</ele>
+        <time>2009-10-17T18:37:31Z</time>
+      </trkpt>
+      <trkpt lat="47.644548" lon="-122.326897">
+        <ele>6.87</ele>
+        <time>2009-10-17T18:37:34Z</time>
+      </trkpt>
+    </trkseg>
+    <trkseg>
+      <trkpt lat="48.644548" lon="-122.326897">
+        <ele>5.46</ele>
+        <time>2009-10-17T19:37:26Z</time>
+      </trkpt>
+      <trkpt lat="48.644548" lon="-122.326897">
+        <ele>5.94</ele>
+        <time>2009-10-17T19:37:31Z</time>
+      </trkpt>
+      <trkpt lat="48.644548" lon="-122.326897">
+        <ele>7.87</ele>
+        <time>2009-10-17T19:37:34Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
