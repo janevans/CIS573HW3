@@ -70,28 +70,39 @@ public class GPXchecker {
         // this is a line ending with ">" (which is ignored)
             String tagLine = in.next().trim();
             // this is the tag we're looking for
-            String tag = null;
-
-            if (tagLine.startsWith("<")) 
-            {
-                // if it starts with a "<", and has a blank space in the line, then there's more stuff but we'll just ignore it
-                if (tagLine.contains(" ")) 
-                {
-                    tag = tagLine.substring(0, tagLine.indexOf(' '));
-                }
-                // otherwise we want the whole line
-                else 
-                {
-                    tag = tagLine;
-                }
-            }else{
-                // if it doesn't start with a "<", we can ignore whatever comes before it
-                tag = tagLine.substring(tagLine.indexOf("<"));
-            }
+            String tag = getTagFromTagLine(tagLine);
             //System.out.println(tag);
             tags.add(tag);
         }
         return tags;
+    }
+    
+    
+    /**
+     * Parse the tag line and get a tag from the tag line.
+     * @param tagLine
+     * @return 
+     */
+    private static String getTagFromTagLine(String tagLine)
+    {
+        String tag;
+        if (tagLine.startsWith("<")) 
+        {
+            // if it starts with a "<", and has a blank space in the line, then there's more stuff but we'll just ignore it
+            if (tagLine.contains(" ")) 
+            {
+                tag = tagLine.substring(0, tagLine.indexOf(' '));
+            }
+            // otherwise we want the whole line
+            else 
+            {
+                tag = tagLine;
+            }
+        }else{
+            // if it doesn't start with a "<", we can ignore whatever comes before it
+            tag = tagLine.substring(tagLine.indexOf("<"));
+        }
+        return tag;
     }
     
     /**
