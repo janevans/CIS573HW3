@@ -13,7 +13,7 @@ public class GPXcalculator {
     long t;
     
     public long calculateElapsedTime(Object o) {
-    	if (o instanceof GPXtrk) return time1((GPXtrk)o);
+    	if (o instanceof GPXtrk) return calculateTimeForTrk((GPXtrk)o);
     	else if (o instanceof GPXtrkseg) {
     		//GPXtrkseg seg = (GPXtrkseg)o;
     		return GPXtrkseg.time((GPXtrkseg)o);
@@ -29,7 +29,7 @@ public class GPXcalculator {
      * @param trk The track for which to calculate the elapsed time.
      * @return the elapsed time in seconds; -1 if the track object is null
      */
-    private long time1(GPXtrk trk) {
+    private long calculateTimeForTrk(GPXtrk trk) {
 	
 		if (trk == null) return -1;
 	
