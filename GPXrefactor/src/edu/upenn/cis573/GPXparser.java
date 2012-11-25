@@ -39,19 +39,7 @@ public class GPXparser {
 		    // index for reading the list
 		    int index = 0;
 	
-		    // read the <gpx> tag
-		    in.next();
-		    index++;
-	
-		    // next is <time>
-		    in.next();
-		    index++;
 		    
-		    // now the content and </time>
-		    String objtime = in.next();
-		    index++;
-		    //System.out.println("TIME: " + objtime);
-		    objtime = objtime.substring(0, objtime.indexOf('<'));
 		    //System.out.println("time: " + objtime);
 		
 		    // now we're on <trk>
@@ -164,4 +152,37 @@ public class GPXparser {
 		return object;
     }
 
+    
+    /**
+     * Read a tag.
+     * @param in
+     * @param index
+     * @return 
+     */
+    private static readTagResult readTag(Scanner in,int index,int skipTimes)
+    {
+        while(skipTimes>0)
+        {
+            in.next();
+            index++;
+        }
+        
+
+        // now the content and </time>
+        String tagValue = in.next();
+        index++;
+        //System.out.println("TIME: " + objtime);
+        return new readTagResult(tagValue.substring(0, tagValue.indexOf('<')),index);
+    }
+    
+    private static class readTagResult
+    {
+        String tagValue;
+        int index;
+        readTagResult(String _tagValue,int _index)
+        {
+            _tagValue = tagValue;
+            _index = index;
+        }
+    }
 }
