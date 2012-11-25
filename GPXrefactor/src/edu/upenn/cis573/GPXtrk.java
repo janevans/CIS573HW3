@@ -24,6 +24,20 @@ public class GPXtrk {
 
     public String name() { return name; }
     public GPXobject parent() { return parent; }
+    public double bearingDele(){
+    	// get the first trkpt in the first trkseg
+    			GPXtrkpt start = trkseg(0).trkpt(0);
+    			// get the last trkpt in the last trkseg
+    			GPXtrkseg lastSeg = trkseg(numSegments()-1);
+    			GPXtrkpt end = lastSeg.trkpt(lastSeg.numPoints()-1);
+    		
+    			// get the points and convert to radians
+    			double lat1 = start.lat() * 2 * Math.PI / 360.0;
+    			double lon1 = start.lon() * 2 * Math.PI / 360.0;
+    			double lat2 = end.lat() * 2 * Math.PI / 360.0;
+    			double lon2 = end.lon() * 2 * Math.PI / 360.0;
+    			return parent.bearing(lat1, lon1, lat2, lon2);
+    }
 
     /**
      * Get the track segment for the given index.
