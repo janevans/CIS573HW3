@@ -52,11 +52,11 @@ public class GPXtrkseg {
     public static long time(GPXtrkseg trkseg) {
 		// get the time of the first point of the segment
 		GPXtrkpt firstPt = trkseg.trkpt(0);
-		long start = firstPt.time();
+		long start = firstPt.getTimeInMilliSecond();
 		
 		// get the time of the last point of the segment
 		GPXtrkpt lastPt = trkseg.trkpt(trkseg.numPoints() - 1);
-		long end = lastPt.time();
+		long end = lastPt.getTimeInMilliSecond();
 		
 		// total elapsed time in milliseconds
 		return end - start;

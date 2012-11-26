@@ -32,17 +32,17 @@ public class GPXtrkpt {
     public double elevation() { return elevation; }
     public String timeString() { return time; }
     
-    public long time() {
+    public long getTimeInMilliSecond() {
 		try {
             /*
              * primitive obssession
              * Wrap the information into a time object instead.
              */		    
 		    Time result = new Time(time);
-            if(!result.isTimeCorrect())
+            if(result.inWrongFormat())
                 return -1;
 			
-			return result.getTime();
+			return result.getTimeInMilliSecond();
 		    
 		}
 		catch (Exception e) {
@@ -53,7 +53,7 @@ public class GPXtrkpt {
 
     }
     
-    public class Time
+    private class Time
     {
         private int year;
         private int month;
@@ -61,6 +61,11 @@ public class GPXtrkpt {
         private int hour ;
         private int minute;
         private int second;
+        
+        /**
+         * Constructor
+         * @param time 
+         */
         public Time(String time)
         {
             year = Integer.parseInt(time.substring(0, 4));
@@ -74,7 +79,7 @@ public class GPXtrkpt {
         /**
          * Validate the correctness of the time range.
          */
-        public boolean isTimeCorrect()
+        public boolean inWrongFormat()
         {
             // make sure the values are valid
 		   return   (year < 1970)              ||
@@ -85,9 +90,9 @@ public class GPXtrkpt {
                     (second < 0 || second > 59) ;
                     
         }
-        public long getTime()
+        public long getTimeInMilliSecond()
         {
-            long time=0;
+            long time;
 			// first, take care of the years
 			time = ((year - 1970) * (60 * 60 * 24 * 365));
 			

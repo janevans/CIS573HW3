@@ -40,7 +40,7 @@ public class GPXtrkptTest {
 
 		GPXtrkpt trkpt = new GPXtrkpt(0, 0, 0, timeString);
 		
-		long trackTime = trkpt.time();
+		long trackTime = trkpt.getTimeInMilliSecond();
 				
 		assert(now.getTimeInMillis() - trackTime < 1000);
 		

@@ -28,9 +28,9 @@ public class GPXparserTest {
 		GPXtrkseg[] trksegs = trk.trksegs();
 		GPXtrkpt trkpt = trksegs[0].trkpt(0);
 
-		assertEquals(47.644548, trkpt.lat(), 0.001);
-		assertEquals(-122.326897, trkpt.lon(), 0.001);
-		assertEquals(4.46, trkpt.ele(), 0.001);
+		assertEquals(47.644548, trkpt.latitude(), 0.001);
+		assertEquals(-122.326897, trkpt.longitude(), 0.001);
+		assertEquals(4.46, trkpt.elevation(), 0.001);
 		assertEquals("2009-10-17T18:37:26Z", trkpt.timeString());
 	}
 
@@ -50,9 +50,9 @@ public class GPXparserTest {
 		GPXtrkseg[] trksegs = trk.trksegs();
 		GPXtrkpt trkpt = trksegs[0].trkpt(0);
 
-		assertEquals(47.644548, trkpt.lat(), 0.001);
-		assertEquals(-122.326897, trkpt.lon(), 0.001);
-		assertEquals(4.46, trkpt.ele(), 0.001);
+		assertEquals(47.644548, trkpt.latitude(), 0.001);
+		assertEquals(-122.326897, trkpt.longitude(), 0.001);
+		assertEquals(4.46, trkpt.elevation(), 0.001);
 		assertEquals("2009-10-17T18:37:26Z", trkpt.timeString());
 	}
 
