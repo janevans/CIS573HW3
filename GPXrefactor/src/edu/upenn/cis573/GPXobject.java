@@ -65,8 +65,8 @@ public class GPXobject {
 			// iterate over the trkpts
 			for (int j = 0; j < trkpts.length; j++) {
 			    
-			    out.append("\t\t\t<trkpt lat=\"" + trkpts[j].lat() + "\" lon=\"" + trkpts[j].lon() + "\">\n");
-			    out.append("\t\t\t\t<ele>" + trkpts[j].ele() + "</ele>\n");
+			    out.append("\t\t\t<trkpt lat=\"" + trkpts[j].latitude() + "\" lon=\"" + trkpts[j].longitude() + "\">\n");
+			    out.append("\t\t\t\t<ele>" + trkpts[j].elevation() + "</ele>\n");
 			    out.append("\t\t\t\t<time>" + trkpts[j].timeString() + "</time>\n");
 			    out.append("\t\t\t</trkpt>\n");
 	

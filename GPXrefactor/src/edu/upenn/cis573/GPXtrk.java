@@ -32,10 +32,10 @@ public class GPXtrk {
     			GPXtrkpt end = lastSeg.trkpt(lastSeg.numPoints()-1);
     		
     			// get the points and convert to radians
-    			double lat1 = start.lat() * 2 * Math.PI / 360.0;
-    			double lon1 = start.lon() * 2 * Math.PI / 360.0;
-    			double lat2 = end.lat() * 2 * Math.PI / 360.0;
-    			double lon2 = end.lon() * 2 * Math.PI / 360.0;
+    			double lat1 = start.latitude() * 2 * Math.PI / 360.0;
+    			double lon1 = start.longitude() * 2 * Math.PI / 360.0;
+    			double lat2 = end.latitude() * 2 * Math.PI / 360.0;
+    			double lon2 = end.longitude() * 2 * Math.PI / 360.0;
     			return parent.bearing(lat1, lon1, lat2, lon2);
     }
 
