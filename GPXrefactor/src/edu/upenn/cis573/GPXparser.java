@@ -1,6 +1,4 @@
 package edu.upenn.cis573;
-
-
 /**
  * Contains a static method to parse a well-formed GPX file and create
  * a GPXobject.
@@ -39,91 +37,103 @@ public class GPXparser {
 		    // index for reading the list
 		    int index = 0;
 	
-		    
-		    //System.out.println("time: " + objtime);
+            ValueAndIndex objtimeWrapper = getObjTime(in,index);
+            String objtime = (String)objtimeWrapper.value;
+            index = objtimeWrapper.index;
 		
-		    // now we're on <trk>
-		    in.next();
-		    index++;
-		    
-		    String name = null;
-		    // next is <name> but it's optional
-		    if (tags.get(index).equals("<name")) {
-		    	in.next();
-		    	index++;
-		    
-		    	// then the content and </name>
-		    	name = in.next();
-		    	index++;
-		    	//System.out.println("NAME: " + name);
-		    	name = name.substring(0, name.indexOf('<'));
-		    	//System.out.println("name: " + name);
-		    }
+            ValueAndIndex nameWrapper = getName(in,index,tags);
+            String name = (String)nameWrapper.value;
+            index = nameWrapper.index;
 	
-		    // to hold the GPXtrk objects
-		    ArrayList trksegs = new ArrayList();
+            ArrayList trksegs = (ArrayList)getTrkSeqsList(index,tags,in).value;
+	
+		    // create the GPXobject
+		    object = new GPXobject(objtime, name, trksegs);
+	
+		}
+		catch (Exception e) 
+        {
+		    e.printStackTrace();	
+		}
+		
+	
+		return object;
+    }    
+    
+    /**
+     * Gets the obj time.
+     * @param in
+     * @param index
+     * @return 
+     */
+    private static ValueAndIndex getObjTime(Scanner in, int index)
+    {
+        ValueAndIndex objtimeWrapper = advanceScanner(in,index,3);
+        objtimeWrapper.value = objtimeWrapper.getElementValue();
+        return objtimeWrapper;
+    }
+    
+    /**
+     * Gets the tag.
+     * @param in
+     * @param index
+     * @param tags
+     * @return 
+     */
+    private static ValueAndIndex getName(Scanner in, int index,ArrayList tags)
+    {
+        ValueAndIndex nameWrapper = advanceScanner(in,index,1);
+        index = nameWrapper.index;
+        if (tags.get(index).equals("<name")) {
+             nameWrapper = advanceScanner(in,nameWrapper.index,2);
+             nameWrapper.value = nameWrapper.getElementValue();	
+		 }else{
+            nameWrapper.value = null;
+        }
+        return nameWrapper;
+    }
+      
+    
+    /**
+     * Advance the scanner and return the tag value.
+     * @param in
+     * @param index
+     * @param times
+     * @return 
+     */
+    private static ValueAndIndex advanceScanner(Scanner in, int index, int times)
+    {
+        String tagValue="";
+        while(times>0)
+        {
+            tagValue = in.next();
+            index++;
+            times--;
+        }
+        return new ValueAndIndex(index,tagValue);
+        
+    }
 
+    /**
+     * Gets TrkSeq List.
+     * @param index
+     * @param tags
+     * @param in
+     * @return 
+     */
+    private static ValueAndIndex getTrkSeqsList(int index, ArrayList tags,Scanner in) 
+    {
+            // to hold the GPXtrk objects
+		    ArrayList trksegs = new ArrayList();
 
 		    // now we have some number of <trkseg> tags
 		    while (tags.get(index++).equals("<trkseg")) {
 				// consume the token
 				in.next();
 				
-				// to hold the GPXtrkpt objects
-				ArrayList trkpts = new ArrayList();
-		
-				// now we have some number of <trkpt> tags
-				while (tags.get(index++).equals("<trkpt")) {
-				    // get the latitude and longitude
-				    String latlon = in.next().trim();
-				    //System.out.println("LATLON: " + latlon);
-		
-				    // the latitude will be something like lat="xx.xxxx"
-				    String lat = latlon.split(" ")[1];
-				    lat = lat.substring(5, lat.length()-1);
-				    //System.out.println("lat: " + lat);
-		
-				    // same for longitude
-				    String lon = latlon.split(" ")[2];
-				    lon = lon.substring(5, lon.length()-1);
-				    //System.out.println("lon: " + lon);
-				    
-		
-				    // read <ele>
-				    in.next();
-				    index++;
-		
-				    // read elevation and </ele>
-				    String ele = in.next();
-				    //System.out.println("ELE: " + ele);
-				    // the elevation will be a number then the </ele tag
-				    ele = ele.substring(0, ele.indexOf('<'));
-				    //System.out.println("ele: " + ele);
-				    index++;
-		
-				    // read <time>
-				    in.next();
-				    index++;
-		
-				    // read time and </time>
-				    String time = in.next();
-				    //System.out.println("TIME: " + time);
-				    // the time will be the time string followed by </time
-				    time = time.substring(0, time.indexOf('<'));
-				    //System.out.println("time: " + time);
-				    index++;
-		
-				    // read </trkpt>
-				    in.next();
-				    index++;
-		
-				    // create a GPXtrkpt object
-				    GPXtrkpt trkpt = new GPXtrkpt(Double.parseDouble(lat), Double.parseDouble(lon), Double.parseDouble(ele), time);
-				    
-				    // put it into the list
-				    trkpts.add(trkpt);
-				}
-		
+				ValueAndIndex valueAndIndex = getTrkPtsList(index,tags,in);
+                index = valueAndIndex.index;
+                ArrayList trkpts = (ArrayList)valueAndIndex.value;
 				// read </trkseg>
 				in.next();
 		
@@ -134,55 +144,83 @@ public class GPXparser {
 				trksegs.add(trkseg);
 		
 			}
-		    
-		    // don't care about </trk> and </gpx>
-		    in.next();
-		    in.next();
-	
-		    // create the GPXobject
-		    object = new GPXobject(objtime, name, trksegs);
-	
-		}
-		catch (Exception e) {
-		    e.printStackTrace();
-	
-		}
-		
-	
-		return object;
+            return new ValueAndIndex(index,trksegs);
     }
-
     
     /**
-     * Read a tag.
-     * @param in
-     * @param index
+     * Gets the latitude or longitude from the latlon String.
+     * @param latlon
+     * @param lat
      * @return 
      */
-    private static readTagResult readTag(Scanner in,int index,int skipTimes)
+    private static String getLatLon(String latlon,boolean lat)
     {
-        while(skipTimes>0)
-        {
-            in.next();
-            index++;
-        }
-        
-
-        // now the content and </time>
-        String tagValue = in.next();
-        index++;
-        //System.out.println("TIME: " + objtime);
-        return new readTagResult(tagValue.substring(0, tagValue.indexOf('<')),index);
+       
+        // the latitude will be something like lat="xx.xxxx"
+        String result = latlon.split(" ")[lat?1:2];
+        result = result.substring(5, result.length()-1);
+        return result;
     }
     
-    private static class readTagResult
+    /**
+     * Form the TrkPts List.
+     * @param index
+     * @param tags
+     * @param in
+     * @return 
+     */
+    private static ValueAndIndex getTrkPtsList(int index, ArrayList tags,Scanner in) 
     {
-        String tagValue;
+        // to hold the GPXtrkpt objects
+        ArrayList trkpts = new ArrayList();
+
+        // now we have some number of <trkpt> tags
+        while (tags.get(index++).equals("<trkpt")) {
+            // get the latitude and longitude
+            String latlon = in.next().trim();
+            //System.out.println("LATLON: " + latlon);
+            String latitude = getLatLon(latlon,true);
+            // same for longitude
+            String longitude = getLatLon(latlon,false);
+            
+            //get ele
+            ValueAndIndex vai = advanceScanner(in,index,2);           
+            String ele = vai.getElementValue();
+            index = vai.index++;
+           
+            //get time
+            vai = advanceScanner(in,index,2);
+            String time = vai.getElementValue();
+            index = vai.index++;
+
+            index = advanceScanner(in,index,1).index;
+
+            // create a GPXtrkpt object
+            GPXtrkpt trkpt = new GPXtrkpt(Double.parseDouble(latitude), Double.parseDouble(longitude), Double.parseDouble(ele), time);
+
+            // put it into the list
+            trkpts.add(trkpt);
+        }
+        return new ValueAndIndex(index,trkpts);
+    }
+    
+    
+    /**
+     * The object that wraps the scanner advancement result.
+     */
+    private static class ValueAndIndex
+    {
         int index;
-        readTagResult(String _tagValue,int _index)
+        Object value;
+        public ValueAndIndex(int _index,Object _value)
         {
-            _tagValue = tagValue;
-            _index = index;
+            index = _index;
+            value = _value;
+        }
+        public String getElementValue()
+        {
+            String ele = (String)value;
+            return ele.substring(0, ele.indexOf('<'));
         }
     }
 }
