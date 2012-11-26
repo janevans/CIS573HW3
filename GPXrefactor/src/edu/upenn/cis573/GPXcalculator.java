@@ -73,7 +73,7 @@ public class GPXcalculator {
      */
     public double getDistanceInTrkseg(GPXtrkseg trkseg) {
 
-		double totalDistance = 0;
+double totalDistance = 0;
 		
 		// iterate over all the trkpts
 		GPXtrkpt pts[] = trkseg.trkpts();
@@ -81,20 +81,37 @@ public class GPXcalculator {
 		for (int j = 0; j < pts.length-1; j++) {
 		    
 		    // get this point and the next one
-		    GPXtrkpt point1 = pts[j];
-		    GPXtrkpt point2 = pts[j+1];
+		    GPXtrkpt pt1 = pts[j];
+		    GPXtrkpt pt2 = pts[j+1];
 		    
-/*
- * move this part to a separate method, increase readability.
- */
-		    
-		    // add it to the running total
-		    totalDistance += doCalculation(point1, point2);
-	    
+//		    // convert lat and lon from degrees to radians
+//		    double lat1 = pt1.latitude() * 2 * Math.PI / 360.0;
+//		    //System.out.println(lat1+" "+convertDegreesToRadians(pt1.latitude()));
+//		    double lon1 = pt1.longitude() * 2 * Math.PI / 360.0;
+//		    //System.out.println(lon1+" "+convertDegreesToRadians(pt1.longitude()));
+//		    double lat2 = pt2.latitude() * 2 * Math.PI / 360.0;
+//		    //System.out.println(lat2+" "+convertDegreesToRadians(pt2.latitude()));
+//		    double lon2 = pt2.longitude() * 2 * Math.PI / 360.0;
+//		   // System.out.println(lon2+" "+convertDegreesToRadians(pt2.longitude()));
+//		    
+//		    // use the spherical law of cosines to figure out 2D distance
+//		    double d = Math.acos(Math.sin(lat1)*Math.sin(lat2) + Math.cos(lat1)*Math.cos(lat2)*Math.cos(lon2-lon1)) * EARTH_RADIUS;	
+//		    //System.out.println("OD"+d);
+//		    // now we need to take the change in elevation into account
+//		    double ele1 = pt1.elevation();
+//		    double ele2 = pt2.elevation();
+//		    System.out.println("OD"+d+" oe1 "+ele1+" oe2 "+ele2);
+//		    // calculate the 3D distance
+//		    double distance = Math.sqrt(d*d + (ele1-ele2)*(ele1-ele2));
+//		    System.out.println(distance+" "+doCalculation(pt1, pt2));
+//		    // add it to the running total
+//		    totalDistance += distance;
+//	    
+		    totalDistance +=doCalculation(pt1, pt2);
+			
 		}
 		
 		return totalDistance;
-
     }
     
     /**
@@ -116,10 +133,11 @@ public class GPXcalculator {
 		    
 		    // use the spherical law of cosines to figure out 2D distance
 		    double d = Math.acos(Math.sin(lat1)*Math.sin(lat2) + Math.cos(lat1)*Math.cos(lat2)*Math.cos(lon2-lon1)) * EARTH_RADIUS;	
+		   
 		    // now we need to take the change in elevation into account
 		    double ele1 = point1.elevation();
-		    double ele2 = point1.elevation();
-		    
+		    double ele2 = point2.elevation();
+		    System.out.println("ND"+d+" ne1 "+ele1+" ne2 "+ele2);
 		    // calculate the 3D distance
 		    distance = Math.sqrt(d*d + (ele1-ele2)*(ele1-ele2));
     		return distance;
@@ -138,40 +156,40 @@ public class GPXcalculator {
 	
 		// iterate over all the trksegs
 		GPXtrkseg segs[] = trk.trksegs();
-		for(int i=0;i<segs.length;i++){
-			totalDistance += getDistanceInTrkseg(segs[i]);
-		}
-//		for (int i = 0; i < segs.length; i++) {
-//		    // calculate the distance for each segment
-//
-//			// iterate over all the trkpts
-//			GPXtrkpt pts[] = segs[i].trkpts();
-//		
-//			for (int j = 0; j < pts.length-1; j++) {
-//			    
-//			    // get this point and the next one
-//			    GPXtrkpt pt1 = pts[j];
-//			    GPXtrkpt pt2 = pts[j+1];
-//			    
-//			    // convert lat and lon from degrees to radians
-//			    double lat1 = pt1.lat() * 2 * Math.PI / 360.0;
-//			    double lon1 = pt1.lon() * 2 * Math.PI / 360.0;
-//			    double lat2 = pt2.lat() * 2 * Math.PI / 360.0;
-//			    double lon2 = pt2.lon() * 2 * Math.PI / 360.0;
-//			    
-//			    // use the spherical law of cosines to figure out 2D distance
-//			    double d = Math.acos(Math.sin(lat1)*Math.sin(lat2) + Math.cos(lat1)*Math.cos(lat2)*Math.cos(lon2-lon1)) * R;	
-//			    // now we need to take the change in elevation into account
-//			    double ele1 = pt1.ele();
-//			    double ele2 = pt2.ele();
-//			    
-//			    // calculate the 3D distance
-//			    double distance = Math.sqrt(d*d + (ele1-ele2)*(ele1-ele2));
-//			    
-//			    // add it to the running total
-//			    totalDistance += distance;
-//			}
+//		for(int i=0;i<segs.length;i++){
+//			totalDistance += getDistanceInTrkseg(segs[i]);
 //		}
+		for (int i = 0; i < segs.length; i++) {
+		    // calculate the distance for each segment
+
+			// iterate over all the trkpts
+			GPXtrkpt pts[] = segs[i].trkpts();
+		
+			for (int j = 0; j < pts.length-1; j++) {
+			    
+			    // get this point and the next one
+			    GPXtrkpt pt1 = pts[j];
+			    GPXtrkpt pt2 = pts[j+1];
+			    
+			    // convert lat and lon from degrees to radians
+			    double lat1 = pt1.latitude() * 2 * Math.PI / 360.0;
+			    double lon1 = pt1.longitude() * 2 * Math.PI / 360.0;
+			    double lat2 = pt2.latitude() * 2 * Math.PI / 360.0;
+			    double lon2 = pt2.longitude() * 2 * Math.PI / 360.0;
+			    
+			    // use the spherical law of cosines to figure out 2D distance
+			    double d = Math.acos(Math.sin(lat1)*Math.sin(lat2) + Math.cos(lat1)*Math.cos(lat2)*Math.cos(lon2-lon1)) *EARTH_RADIUS;	
+			    // now we need to take the change in elevation into account
+			    double ele1 = pt1.elevation();
+			    double ele2 = pt2.elevation();
+			    
+			    // calculate the 3D distance
+			    double distance = Math.sqrt(d*d + (ele1-ele2)*(ele1-ele2));
+			    
+			    // add it to the running total
+			    totalDistance += distance;
+			}
+		}
 	
 		return totalDistance;
 	
