@@ -52,29 +52,8 @@ public class GPXobject {
 		// get all the trkseg obejcts
 		GPXtrkseg trksegs[] = trk.trksegs();
 	
-		if (trksegs != null) {
-	
-		    // iterate over the trksegs
-		    for (int i = 0; i < trksegs.length; i++) {
-			
-			out.append("\t\t<trkseg>\n");
-			
-			// get all the trkpt objects
-			GPXtrkpt trkpts[] = trksegs[i].trkpts();
-	
-			// iterate over the trkpts
-			for (int j = 0; j < trkpts.length; j++) {
-			    
-			    out.append("\t\t\t<trkpt lat=\"" + trkpts[j].latitude() + "\" lon=\"" + trkpts[j].longitude() + "\">\n");
-			    out.append("\t\t\t\t<ele>" + trkpts[j].elevation() + "</ele>\n");
-			    out.append("\t\t\t\t<time>" + trkpts[j].timeString() + "</time>\n");
-			    out.append("\t\t\t</trkpt>\n");
-	
-			}
-	
-			out.append("\t\t</trkseg>\n");
-		    }
-	
+		if (trksegs != null) {    
+			out =   appendTrkSeq(out,trksegs);
 		}
 	
 		out.append("\t</trk>\n");
@@ -84,10 +63,38 @@ public class GPXobject {
 		return out.toString();
 
     }
+    
+    private StringBuffer appendTrkSeq(StringBuffer out,GPXtrkseg trksegs[])
+    {
+        // iterate over the trksegs
+        for (int i = 0; i < trksegs.length; i++) {
+            out.append("\t\t<trkseg>\n");
+            // get all the trkpt objects
+            GPXtrkpt trkpts[] = trksegs[i].trkpts();      
+            out = appendTrkpt(out,trkpts);
+            out.append("\t\t</trkseg>\n");
 
-    public double bearing(double a, double b, double c, double d) {
-		double y = Math.sin(d-b) * Math.cos(c);
-		double x = Math.cos(a)*Math.sin(c) - Math.sin(a)*Math.cos(c)*Math.cos(d-b);
+         }
+        return out;
+    }
+    
+    private StringBuffer appendTrkpt(StringBuffer out,GPXtrkpt trkpts[])
+    {
+        // iterate over the trkpts
+        for (int j = 0; j < trkpts.length; j++) 
+        {
+            out.append("\t\t\t<trkpt lat=\"" + trkpts[j].latitude() + "\" lon=\"" + trkpts[j].longitude() + "\">\n");
+            out.append("\t\t\t\t<ele>" + trkpts[j].elevation() + "</ele>\n");
+            out.append("\t\t\t\t<time>" + trkpts[j].timeString() + "</time>\n");
+            out.append("\t\t\t</trkpt>\n");
+
+        }
+        return out;
+    }
+
+    public double calculateBearing(double lat1, double lon1, double lat2, double lon2) {
+		double y = Math.sin(lon2-lon1) * Math.cos(lat2);
+		double x = Math.cos(lat1)*Math.sin(lat2) - Math.sin(lat1)*Math.cos(lat2)*Math.cos(lon2-lon1);
 				
 		// return the bearing (after converting to degrees)
 		return Math.atan2(y, x) * 360.0 / (2 * Math.PI);
