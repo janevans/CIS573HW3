@@ -163,34 +163,35 @@ double totalDistance = 0;
 		    // calculate the distance for each segment
 
 			// iterate over all the trkpts
-			GPXtrkpt pts[] = segs[i].trkpts();
+			//GPXtrkpt pts[] = segs[i].trkpts();
 		
-			for (int j = 0; j < pts.length-1; j++) {
-			    
-			    // get this point and the next one
-			    GPXtrkpt pt1 = pts[j];
-			    GPXtrkpt pt2 = pts[j+1];
-			    
-			    // convert lat and lon from degrees to radians
-			    double lat1 = pt1.latitude() * 2 * Math.PI / 360.0;
-			    double lon1 = pt1.longitude() * 2 * Math.PI / 360.0;
-			    double lat2 = pt2.latitude() * 2 * Math.PI / 360.0;
-			    double lon2 = pt2.longitude() * 2 * Math.PI / 360.0;
-			    
-			    // use the spherical law of cosines to figure out 2D distance
-			    double d = Math.acos(Math.sin(lat1)*Math.sin(lat2) + Math.cos(lat1)*Math.cos(lat2)*Math.cos(lon2-lon1)) *EARTH_RADIUS;	
-			    // now we need to take the change in elevation into account
-			    double ele1 = pt1.elevation();
-			    double ele2 = pt2.elevation();
-			    
-			    // calculate the 3D distance
-			    double distance = Math.sqrt(d*d + (ele1-ele2)*(ele1-ele2));
-			    
-			    // add it to the running total
-			    totalDistance += distance;
-			}
+//			for (int j = 0; j < pts.length-1; j++) {
+//			    
+//			    // get this point and the next one
+//			    GPXtrkpt pt1 = pts[j];
+//			    GPXtrkpt pt2 = pts[j+1];
+//			    
+//			    // convert lat and lon from degrees to radians
+//			    double lat1 = pt1.latitude() * 2 * Math.PI / 360.0;
+//			    double lon1 = pt1.longitude() * 2 * Math.PI / 360.0;
+//			    double lat2 = pt2.latitude() * 2 * Math.PI / 360.0;
+//			    double lon2 = pt2.longitude() * 2 * Math.PI / 360.0;
+//			    
+//			    // use the spherical law of cosines to figure out 2D distance
+//			    double d = Math.acos(Math.sin(lat1)*Math.sin(lat2) + Math.cos(lat1)*Math.cos(lat2)*Math.cos(lon2-lon1)) *EARTH_RADIUS;	
+//			    // now we need to take the change in elevation into account
+//			    double ele1 = pt1.elevation();
+//			    double ele2 = pt2.elevation();
+//			    
+//			    // calculate the 3D distance
+//			    double distance = Math.sqrt(d*d + (ele1-ele2)*(ele1-ele2));
+//			    
+//			    // add it to the running total
+//			    totalDistance += distance;
+//			}
+//		}
+			totalDistance +=getDistanceInTrkseg(segs[i]);
 		}
-	
 		return totalDistance;
 	
 
