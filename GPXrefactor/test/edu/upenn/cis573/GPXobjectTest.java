@@ -48,16 +48,16 @@ public class GPXobjectTest {
 		GPXobject obj = new GPXobject(null, null, null);
 		
 		// due north: lat gets bigger, lon stays the same
-		assertEquals(0, obj.bearing(0, 0, 20, 0), 0);
+		assertEquals(0, obj.calculateBearing(0, 0, 20, 0), 0);
 
 		// due south: lat gets smaller, lon stays the same
-		assertEquals(180, obj.bearing(0, 0, -20, 0), 0);
+		assertEquals(180, obj.calculateBearing(0, 0, -20, 0), 0);
 
 		// due east: lat stays same, lon gets bigger
-		assertEquals(90, obj.bearing(0, 0, 0, 20), 0);
+		assertEquals(90, obj.calculateBearing(0, 0, 0, 20), 0);
 
 		// due west: lat stays same, lon gets smaller
-		assertEquals(-90, obj.bearing(0, 0, 0, -20), 0);
+		assertEquals(-90, obj.calculateBearing(0, 0, 0, -20), 0);
 	}
 
 }
